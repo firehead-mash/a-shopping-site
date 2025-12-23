@@ -23,6 +23,7 @@
 
 项目完整目录结构如下：
 
+```
 a-shopping-site/
 ├─ manage.py
 ├─ db.sqlite3
@@ -47,7 +48,7 @@ a-shopping-site/
 ├─ media/
 │ └─ products/
 └─ requirements.txt
-
+```
 
 ---
 
