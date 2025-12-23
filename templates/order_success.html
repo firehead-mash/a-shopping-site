@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>订单创建成功！</h3>
+<p>请前往邮箱查收确认邮件。</p>
+<p>订单创建后，你可以在 <a href="{% url 'order_list' %}">订单列表</a> 查看状态。</p>
+{% endblock %}

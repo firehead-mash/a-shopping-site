@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>商品管理</h3>
+
+<a class="btn btn-success mb-3" href="{% url 'admin_product_add' %}">➕ 添加商品</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>图片</th>
+            <th>名称</th>
+            <th>库存</th>
+            <th>价格</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in products %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>
+                {% if p.image %}
+                <img src="{{ p.image.url }}" width="60">
+                {% endif %}
+            </td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.stock }}</td>
+            <td>{{ p.price }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{% url 'admin_product_edit' p.id %}">编辑</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'admin_product_delete' p.id %}"
+                   onclick="return confirm('确定删除？')">删除</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">暂无商品</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

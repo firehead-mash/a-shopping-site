@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>销售统计报表（最近 30 天）</h3>
+
+<div class="container mt-4">
+  <canvas id="salesChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- 安全输出 JSON -->
+{{ labels|json_script:"labelsData" }}
+{{ totals|json_script:"totalsData" }}
+
+<script>
+    const labels = JSON.parse(document.getElementById("labelsData").textContent);
+    const totals = JSON.parse(document.getElementById("totalsData").textContent);
+
+    const ctx = document.getElementById('salesChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '每日销售额（¥）',
+                data: totals,
+                borderWidth: 2,
+                tension: 0.3,
+                borderColor: 'blue'
+            }]
+        }
+    });
+</script>
+<a href="{% url 'export_sales_report_csv' %}"
+   class="btn btn-outline-primary mb-3">
+    导出销售报表（CSV）
+</a>
+
+
+{% endblock %}

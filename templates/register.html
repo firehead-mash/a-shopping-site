@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>注册</h3>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.username.label }} {{ form.username }} <br>
+    {{ form.email.label }} {{ form.email }} 
+    <button type="button" class="btn btn-secondary" onclick="sendCode()">发送验证码</button>
+    <br><br>
+
+    {{ form.code.label }} {{ form.code }} <br><br>
+
+    {{ form.password.label }} {{ form.password }} <br><br>
+
+    <button class="btn btn-primary" type="submit">注册</button>
+</form>
+
+<script>
+function sendCode() {
+    let email = document.querySelector("input[name='email']").value;
+    if(!email){
+        alert("请先填写邮箱");
+        return;
+    }
+    fetch(`/send_code/?email=${email}`)
+    .then(res => res.json())
+    .then(data => { alert(data.msg); });
+}
+</script>
+
+{% endblock %}

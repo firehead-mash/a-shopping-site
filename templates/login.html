@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>登录</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary" type="submit">登录</button>
+  <p><a href="{% url 'forgot_password' %}">忘记密码？</a></p>
+</form>
+{% endblock %}

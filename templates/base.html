@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>MyShop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    >
+  </head>
+
+  <body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+      <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand" href="{% url 'product_list' %}">MyShop</a>
+
+        <!-- 左侧导航 -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cart' %}">购物车</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'order_list' %}">我的订单</a>
+          </li>
+        </ul>
+
+        <!-- 右侧用户区 -->
+        <div class="d-flex align-items-center gap-2">
+          {% if user.is_authenticated %}
+            <!-- 用户名 -->
+            <span class="navbar-text text-light me-2">
+              你好，{{ user.username }}
+            </span>
+
+            <!-- 账号操作 -->
+            <div class="btn-group" role="group">
+              <a
+                class="btn btn-outline-light btn-sm"
+                href="{% url 'logout' %}"
+              >
+                退出
+              </a>
+
+              <form
+                method="post"
+                action="{% url 'delete_account' %}"
+                onsubmit="return confirm('确定要注销账号吗？此操作不可恢复！');"
+              >
+                {% csrf_token %}
+                <button class="btn btn-outline-danger btn-sm">
+                  注销账号
+                </button>
+              </form>
+            </div>
+
+            <!-- 管理员后台 -->
+            {% if user.is_superuser %}
+              <div class="btn-group ms-2">
+                <button
+                  type="button"
+                  class="btn btn-warning btn-sm dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  后台管理
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="{% url 'admin_product_list' %}">
+                      商品管理
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'admin_orders' %}">
+                      订单管理
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'sales_report' %}">
+                      销售报表
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            {% endif %}
+
+          {% else %}
+            <!-- 未登录 -->
+            <a
+              class="btn btn-outline-light btn-sm"
+              href="{% url 'login' %}"
+            >
+              登录
+            </a>
+            <a
+              class="btn btn-outline-light btn-sm"
+              href="{% url 'register' %}"
+            >
+              注册
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <div class="container">
+      {% if messages %}
+        {% for m in messages %}
+          <div class="alert alert-{{ m.tags }}">
+            {{ m }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

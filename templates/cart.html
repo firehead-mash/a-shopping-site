@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>购物车</h3>
+
+{% if items %}
+<table class="table" id="cart-table">
+  <thead>
+    <tr><th>商品</th><th>数量</th><th>单价</th><th>小计</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for it in items %}
+    <tr data-id="{{ it.id }}">
+      <td>{{ it.product.name }}</td>
+
+      <!-- 可修改数量 + Ajax -->
+      <td>
+        <input type="number"
+               value="{{ it.quantity }}"
+               min="1"
+               max="{{ it.product.stock }}"
+               class="form-control cart-qty"
+               data-id="{{ it.id }}">
+      </td>
+
+      <td>¥{{ it.product.price }}</td>
+
+      <!-- Ajax 修改后这里动态更新 -->
+      <td class="item-subtotal">¥{{ it.subtotal }}</td>
+
+      <td>
+        <a class="btn btn-danger btn-sm" href="{% url 'remove_from_cart' it.id %}">
+          移除
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="3"><strong>总计</strong></td>
+      <td colspan="2" id="cart-total"><strong>¥{{ total }}</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<a class="btn btn-primary" href="{% url 'checkout' %}">去结算</a>
+{% else %}
+<p>购物车为空。</p>
+{% endif %}
+
+<!-- Ajax -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).on("change", ".cart-qty", function () {
+    let cartId = $(this).data("id");
+    let newQty = $(this).val();
+
+    $.ajax({
+        url: "{% url 'update_cart_quantity' %}",
+        type: "POST",
+        data: {
+            'cart_id': cartId,
+            'quantity': newQty,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function (res) {
+
+            if (res.error === "overstock") {
+                alert(res.message);
+                $(`.cart-qty[data-id="${cartId}"]`).val(res.max);
+                return;
+            }
+
+            // 更新小计
+            $(`tr[data-id="${cartId}"] .item-subtotal`).text("¥" + res.subtotal);
+
+            // 更新总价
+            $("#cart-total").html("<strong>¥" + res.total + "</strong>");
+        }
+    });
+});
+</script>
+
+{% endblock %}
