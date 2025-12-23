@@ -23,23 +23,22 @@
 
 项目完整目录结构如下：
 
+```
 a-shopping-site/
 ├─ manage.py
 ├─ db.sqlite3
 ├─ shop/
 │ ├─ settings.py
 │ ├─ urls.py
-│ ├─ wsgi.py
-│ └─ pycache/
+│ └─ wsgi.py
 ├─ store/
 │ ├─ models.py
 │ ├─ views.py
 │ ├─ forms.py
 │ ├─ urls.py
 │ ├─ admin.py
-│ ├─ migrations/
-│ │ └─ pycache/
-│ └─ pycache/
+│ └─ migrations/
+│ 
 ├─ templates/
 │ └─ admin/
 ├─ static/
@@ -47,7 +46,7 @@ a-shopping-site/
 ├─ media/
 │ └─ products/
 └─ requirements.txt
-
+```
 
 ---
 
