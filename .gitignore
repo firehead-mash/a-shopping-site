@@ -19,7 +19,8 @@ db.sqlite3
 # Django 静态 / 媒体文件
 # =========================
 # 用户/管理员上传的文件（商品图片等）
-media/
+media/products/*
+!media/products/.gitkeep
 
 # collectstatic 生成的文件
 staticfiles/
